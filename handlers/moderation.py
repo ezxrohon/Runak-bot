@@ -33,7 +33,6 @@ TIER_PRIVILEGES = {
         can_change_info=False,
         can_invite_users=True,
         can_pin_messages=True,
-        can_manage_topics=False,
     ),
     2: ChatPrivileges(
         is_anonymous=False,
@@ -45,7 +44,6 @@ TIER_PRIVILEGES = {
         can_change_info=False,
         can_invite_users=True,
         can_pin_messages=False,
-        can_manage_topics=False,
     ),
     3: ChatPrivileges(
         is_anonymous=False,
@@ -57,7 +55,6 @@ TIER_PRIVILEGES = {
         can_change_info=False,
         can_invite_users=True,
         can_pin_messages=True,
-        can_manage_topics=False,
     ),
 }
 

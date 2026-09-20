@@ -84,7 +84,6 @@ FULL_DEMOTE_PRIVILEGES = ChatPrivileges(
     can_change_info=False,
     can_invite_users=False,
     can_pin_messages=False,
-    can_manage_topics=False,
 )
 
 

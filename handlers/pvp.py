@@ -14,8 +14,9 @@ from config import (
     KILL_SUCCESS_RATE,
     PROTECTION_HOURS,
     REVIVE_COST,
+    DAILY_KILL_LIMIT,
 )
-from .common import resolve_target, format_protection_remaining
+from .common import resolve_reply_target, format_protection_remaining
 from .levels import grant_xp
 
 
@@ -24,7 +25,9 @@ def register_pvp_handlers(app: Client):
     @app.on_message(filters.command("kill"))
     async def kill_cmd(client, message: Message):
         killer = message.from_user
-        victim = await resolve_target(client, message)
+        # Reply-only - /kill @username with no reply is not accepted, so
+        # people can't kill someone without actually engaging their message.
+        victim = await resolve_reply_target(client, message)
         if not victim:
             return await message.reply_text("⚠️ Reply to the user you want to kill.")
 
@@ -36,6 +39,12 @@ def register_pvp_handlers(app: Client):
 
         if await db.get_status(killer.id) == "dead":
             return await message.reply_text("💀 You're dead — use /revive before attacking anyone.")
+
+        daily_kills = await db.get_daily_kills(killer.id)
+        if daily_kills >= DAILY_KILL_LIMIT:
+            return await message.reply_text(
+                f"🚫 You've hit today's kill limit ({DAILY_KILL_LIMIT}/{DAILY_KILL_LIMIT}). Try again tomorrow."
+            )
 
         last_kill = await db.get_last_kill(killer.id)
         elapsed = time.time() - last_kill
@@ -55,6 +64,7 @@ def register_pvp_handlers(app: Client):
             return await message.reply_text(f"💀 {victim.first_name} is already dead.")
 
         await db.set_last_kill(killer.id)
+        await db.bump_daily_kills(killer.id)
 
         success = random.random() < KILL_SUCCESS_RATE
         if success:
@@ -94,13 +104,26 @@ def register_pvp_handlers(app: Client):
         await db.clear_protection(user.id)
         await message.reply_text(f"💫 You paid {REVIVE_COST} {CURRENCY_EMOJI} and are back among the living!")
 
-    @app.on_message(filters.command("topkill"))
+    @app.on_message(filters.command(["topkill", "gbkboard"]))
     async def topkill_cmd(client, message: Message):
         top = await db.get_kill_leaderboard(10)
         if not top or all(e["kills"] == 0 for e in top):
             return await message.reply_text("No kills yet — be the first with /kill (reply to someone)!")
 
-        lines = ["⚔️ Top Killers"]
+        lines = ["⚔️ Top Killers (Global)"]
+        for i, entry in enumerate(top, start=1):
+            if entry["kills"] == 0:
+                break
+            lines.append(f"{i}. {entry['first_name']} — {entry['kills']} kills")
+        await message.reply_text("\n".join(lines))
+
+    @app.on_message(filters.group & filters.command("kleaderboard"))
+    async def group_topkill_cmd(client, message: Message):
+        top = await db.get_group_kill_leaderboard(message.chat.id, 10)
+        if not top or all(e["kills"] == 0 for e in top):
+            return await message.reply_text("No kills here yet — be the first with /kill (reply to someone)!")
+
+        lines = [f"⚔️ Top Killers — {message.chat.title}"]
         for i, entry in enumerate(top, start=1):
             if entry["kills"] == 0:
                 break

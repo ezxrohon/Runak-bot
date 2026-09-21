@@ -29,7 +29,7 @@ A group manager with a fun side:
 """
         buttons = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("⚒️ Add to Group ⚒️", url=f"https://t.me/{BOT_USERNAME}?startgroup=true")],
+                [InlineKeyboardButton("⚒️ Add to Group ⚒️", url=f"https://t.me/{@Im_runakbot}?startgroup=true")],
                 [
                     InlineKeyboardButton("⌂ Support ⌂", url=SUPPORT_GROUP),
                     InlineKeyboardButton("⌂ Updates ⌂", url=UPDATE_CHANNEL),
@@ -117,32 +117,32 @@ Choose a category:
         buttons = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("⌂ Moderation ⌂", callback_data="help_moderation"),
-                    InlineKeyboardButton("⌂ Welcome ⌂", callback_data="help_welcome"),
+                    InlineKeyboardButton("🛡️ Moderation ⌂", callback_data="help_moderation"),
+                    InlineKeyboardButton("🪬Welcome ⌂", callback_data="help_welcome"),
                 ],
                 [
-                    InlineKeyboardButton("⌂ Locks ⌂", callback_data="help_locks"),
-                    InlineKeyboardButton("⌂ Economy ⌂", callback_data="help_economy"),
+                    InlineKeyboardButton("🔐 Locks ⌂", callback_data="help_locks"),
+                    InlineKeyboardButton("💸 Economy ⌂", callback_data="help_economy"),
                 ],
                 [
-                    InlineKeyboardButton("⌂ Shop & Gifts ⌂", callback_data="help_shop"),
-                    InlineKeyboardButton("⌂ Fun & Games ⌂", callback_data="help_fun"),
+                    InlineKeyboardButton("🛍️Shop & Gifts ⌂", callback_data="help_shop"),
+                    InlineKeyboardButton("🧪 Fun & Games ⌂", callback_data="help_fun"),
                 ],
                 [
                     InlineKeyboardButton("🎮 Games ⌂", callback_data="help_games_menu"),
-                    InlineKeyboardButton("⌂ Levels ⌂", callback_data="help_levels"),
+                    InlineKeyboardButton("👾 Levels ⌂", callback_data="help_levels"),
                 ],
                 [
-                    InlineKeyboardButton("⌂ Coupons ⌂", callback_data="help_coupons"),
-                    InlineKeyboardButton("⌂ Group Tools ⌂", callback_data="help_grouptools"),
+                    InlineKeyboardButton("🎟️ Coupons ⌂", callback_data="help_coupons"),
+                    InlineKeyboardButton("🛡️Group Tools ⌂", callback_data="help_grouptools"),
                 ],
                 [
-                    InlineKeyboardButton("⌂ Notes & Rules ⌂", callback_data="help_notes"),
-                    InlineKeyboardButton("⌂ Utility ⌂", callback_data="help_utility"),
+                    InlineKeyboardButton("🧸Notes & Rules ⌂", callback_data="help_notes"),
+                    InlineKeyboardButton("🔮 Utility ⌂", callback_data="help_utility"),
                 ],
                 [
-                    InlineKeyboardButton("⌂ Owner Tools ⌂", callback_data="help_owner"),
-                    InlineKeyboardButton("⌂ AI Chat ⌂", callback_data="help_ai"),
+                    InlineKeyboardButton("👑Owner Tools ⌂", callback_data="help_owner"),
+                    InlineKeyboardButton("🐼 AI Chat ⌂", callback_data="help_ai"),
                 ],
             ]
         )

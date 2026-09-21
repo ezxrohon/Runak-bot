@@ -19,6 +19,7 @@ loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
 
 import os
+os.environ["PATH"] = os.getcwd() + os.pathsep + os.environ.get("PATH", "")
 import logging
 import threading
 import traceback

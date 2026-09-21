@@ -29,7 +29,7 @@ A group manager with a fun side:
 """
         buttons = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("⚒️ Add to Group ⚒️", url=f"https://t.me/{ @Im_runakbot}?startgroup=true")],
+                [InlineKeyboardButton("⚒️ Add to Group ⚒️", url=f"https://t.me/{@Im_runakbot}?startgroup=true")],
                 [
                     InlineKeyboardButton("⌂ Support ⌂", url=SUPPORT_GROUP),
                     InlineKeyboardButton("⌂ Updates ⌂", url=UPDATE_CHANNEL),

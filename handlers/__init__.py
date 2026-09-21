@@ -32,7 +32,6 @@ from .report import register_report_handlers
 from .rules import register_rules_handlers
 from .utility import register_utility_handlers
 from .ai import register_ai_handlers
-from .music import register_music_handlers
 
 
 def register_all_handlers(app):
@@ -66,5 +65,4 @@ def register_all_handlers(app):
     register_rules_handlers(app)
     register_utility_handlers(app)
     register_ai_handlers(app)
-    register_music_handlers(app)
     print("✅ All ʀuɴAk handlers registered!")

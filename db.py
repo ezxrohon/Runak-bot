@@ -11,6 +11,8 @@
 #   /welcome/<chat_id>        {message, enabled}
 #   /locks/<chat_id>          {locks: {type: bool}}
 #   /warns/<chat_id>/<user_id> {count}
+#   /fragments/<user_id>      {color: count}
+#   /funds/<user_id>          {amount}
 # ============================================================
 
 import time
@@ -395,6 +397,73 @@ async def add_gift_item(user_id, item_id: str, amount: int = 1):
     inv = await get_gift_inventory(user_id)
     inv[item_id] = inv.get(item_id, 0) + amount
     await _patch(f"/gifts/{user_id}", {item_id: inv[item_id]})
+
+
+# ==========================================================
+# 🧩 Fragment Collection System
+# ==========================================================
+
+async def get_fragments(user_id: int) -> dict:
+    """Get user's fragment collection {color: count}"""
+    data = await _get(f"/fragments/{user_id}")
+    return data or {}
+
+
+async def add_fragment(user_id: int, color: str, amount: int = 1):
+    """Add fragments to user's collection"""
+    frags = await get_fragments(user_id)
+    frags[color] = frags.get(color, 0) + amount
+    await _patch(f"/fragments/{user_id}", frags)
+
+
+async def remove_fragment(user_id: int, color: str, amount: int = 1) -> bool:
+    """Remove fragments (returns False if insufficient)"""
+    frags = await get_fragments(user_id)
+    if frags.get(color, 0) < amount:
+        return False
+    frags[color] -= amount
+    if frags[color] == 0:
+        del frags[color]
+    await _patch(f"/fragments/{user_id}", frags or {})
+    return True
+
+
+async def get_fragment_count(user_id: int, color: str) -> int:
+    """Get count of a specific fragment color"""
+    frags = await get_fragments(user_id)
+    return frags.get(color, 0)
+
+
+# ==========================================================
+# 💼 Funds Wallet (for premium purchases with rare fragment sales)
+# ==========================================================
+
+async def get_funds(user_id: int) -> int:
+    """Get user's ₹ funds balance"""
+    data = await _get(f"/funds/{user_id}")
+    return int(data) if data else 0
+
+
+async def add_funds(user_id: int, amount: int):
+    """Add funds to user's wallet"""
+    current = await get_funds(user_id)
+    new_funds = current + amount
+    await _patch(f"/funds/{user_id}", new_funds)
+
+
+async def set_funds(user_id: int, amount: int):
+    """Set user's funds balance"""
+    await _patch(f"/funds/{user_id}", amount)
+
+
+async def transfer_funds(from_id: int, to_id: int, amount: int) -> bool:
+    """Transfer funds between users"""
+    sender_funds = await get_funds(from_id)
+    if sender_funds < amount:
+        return False
+    await add_funds(from_id, -amount)
+    await add_funds(to_id, amount)
+    return True
 
 
 # ==========================================================
